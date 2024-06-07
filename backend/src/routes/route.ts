@@ -1,5 +1,6 @@
 import express, { Express, Request, Response, Router } from "express";
 import { v4 as uuidv4 } from "uuid";
+import urldb from "../module/database";
 
 const urlrouter: Router = express.Router();
 
@@ -13,6 +14,14 @@ urlrouter.post("/v1/longurl/:url", (req: Request, res: Response) => {
     if (!req.params.url) {
       new Error("Please enter your url");
     }
+
+    const query = "select * from urltable";
+    urldb.query(query, (error, result) => {
+      if (error) {
+        console.log(error);
+      }
+      console.log(result);
+    });
 
     const longurl = req.params.url;
     console.log(longurl);
