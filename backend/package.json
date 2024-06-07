@@ -1,0 +1,10 @@
+{
+  "name": "url-shortern-backend",
+  "version": "1.0.0",
+  "main": "/src/index.js",
+  "author": "vimalramk",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
