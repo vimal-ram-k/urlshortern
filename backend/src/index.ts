@@ -1,14 +1,14 @@
 import express, { Express, Request, Response } from "express";
 import cors from "cors";
+import urlrouter from "./routes/route";
 
 const app: Express = express();
 const PORT = 3000;
 
 app.use(cors());
 app.use(express.json());
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hi Backend Stated");
-});
+
+app.use("/", urlrouter);
 
 app.listen(PORT, () => {
   console.log("Hi Server Started...", `${PORT}`);
