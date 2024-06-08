@@ -3,12 +3,13 @@ import { v4 as uuidv4 } from "uuid";
 import urldb from "../module/database";
 import encodeBase62 from "../util/base62";
 
+import { QueryError, RowDataPacket } from "mysql2";
 type urlFuncType = {
   generateUUID: () => number;
 };
 
-type DB = {
-  pk: string;
+type DB = RowDataPacket & {
+  id: number;
   longurl: string;
   shorturl: string;
 };
@@ -40,32 +41,37 @@ urlrouter.post("/v1/longurl/:url", (req: Request, res: Response) => {
       new Error("Please enter your url");
     }
     const longurl = req.params.url;
-    urldb.execute(DBqueries.checkLongURL, [longurl], (error, result: []) => {
-      if (error) {
-        console.log(error);
-      }
-      if (result.length > 0) {
-        res.send(result);
-      } else {
-        const UUID = UUIDFunction.generateUUID();
-        const shorturl = encodeBase62(UUID);
-        console.log(shorturl, UUID);
+    urldb.execute<DB[]>(
+      DBqueries.checkLongURL,
+      [longurl],
+      (error, result: DB[]) => {
+        if (error) {
+          console.log(error);
+        }
+        console.log(result);
+        if (result.length > 0 && result) {
+          res.json({ shorturl: `https://www.short.com/${result[0].shorturl}` });
+        } else {
+          const UUID = UUIDFunction.generateUUID();
+          const shorturl = encodeBase62(UUID);
+          console.log(shorturl, UUID);
 
-        urldb.query(
-          DBqueries.addLongURL,
-          [UUID, longurl, shorturl],
-          (error, resolve) => {
-            if (error) {
-              console.log(error);
+          urldb.query(
+            DBqueries.addLongURL,
+            [UUID, longurl, shorturl],
+            (error, resolve) => {
+              if (error) {
+                console.log(error);
+              }
+              if (resolve) {
+                console.log(resolve);
+                res.json({ shorturl: `https://www.short.com/${shorturl}` });
+              }
             }
-            if (resolve) {
-              console.log(resolve);
-              res.json({ shorturl: `https://www.short.com/${shorturl}` });
-            }
-          }
-        );
+          );
+        }
       }
-    });
+    );
   } catch (error) {
     res.send(error);
   }
