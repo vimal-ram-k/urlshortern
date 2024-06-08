@@ -8,9 +8,9 @@ const LongtoShort = () => {
 
   async function GenerateShortURL() {
     const shortURL = await axios
-      .post(`${baseURL}/${longurl}`)
+      .post(`${baseURL}/${shorturl}`)
       .then((response) => {
-        return response.data.shorturl;
+        return response.data[0].longurl;
       });
     setShortURL(shortURL);
   }
