@@ -84,11 +84,13 @@ urlrouter.post("/v1/shorturl/:url", async (req: Request, res: Response) => {
     }
     const shorturl = req.params.url;
     console.log(shorturl);
-    urldb.query(DBqueries.findlongurl, [shorturl], (error, resolve) => {
+    urldb.query<DB[]>(DBqueries.findlongurl, [shorturl], (error, resolve) => {
       if (error) {
         res.send(error);
       }
-      res.send(resolve);
+      if (resolve.length > 0 && resolve) {
+        res.json({ longurl: resolve[0].longurl });
+      }
     });
   } catch (error) {
     res.send(error);
