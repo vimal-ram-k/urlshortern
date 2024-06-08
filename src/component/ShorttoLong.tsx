@@ -10,7 +10,7 @@ const ShorttoLong = () => {
   async function GenerateOriginalURL() {
     const url = shorturl.split("/").slice(-1);
     const longurl = await axios.post(`${baseURL}/${url}`).then((response) => {
-      return response.data[0].longurl;
+      return response.data.longurl;
     });
     setOriginalUrl(longurl);
   }
