@@ -3,11 +3,13 @@ import ShorttoLong from "./component/ShorttoLong";
 
 function App() {
   return (
-    <>
+    <div
+      className=" bg-black d-flex flex-column flex-lg-row justify-content-center"
+      style={{ height: "100dvh" }}
+    >
       <LongtoShort />
-      <h1>---------------</h1>
       <ShorttoLong />
-    </>
+    </div>
   );
 }
 
