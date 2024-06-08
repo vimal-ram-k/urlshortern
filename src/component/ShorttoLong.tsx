@@ -8,12 +8,11 @@ const ShorttoLong = () => {
   const baseURL = "http://localhost:3000/v1/shorturl";
 
   async function GenerateOriginalURL() {
-    const shortURL = await axios
-      .post(`${baseURL}/${shorturl}`)
-      .then((response) => {
-        return response.data.shorturl;
-      });
-    setOriginalUrl(shortURL);
+    const url = shorturl.split("/").slice(-1);
+    const longurl = await axios.post(`${baseURL}/${url}`).then((response) => {
+      return response.data[0].longurl;
+    });
+    setOriginalUrl(longurl);
   }
 
   return (
