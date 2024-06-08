@@ -2,7 +2,7 @@ import { ChangeEvent, useState } from "react";
 import axios from "axios";
 
 function App() {
-  const baseURL = "http://localhost:3000/v1/longurl/";
+  const baseURL = "http://localhost:3000/v1/longurl";
   const [longurl, setLongURL] = useState("");
   const [shorturl, setShortURL] = useState("");
 
