@@ -4,6 +4,7 @@ import urldb from "../module/database";
 import encodeBase62 from "../util/base62";
 
 import { QueryError, RowDataPacket } from "mysql2";
+import { HttpStatusCode } from "axios";
 type urlFuncType = {
   generateUUID: () => number;
 };
@@ -50,11 +51,12 @@ urlrouter.post("/v1/longurl/:url", (req: Request, res: Response) => {
         }
         console.log(result);
         if (result.length > 0 && result) {
-          res.json({ shorturl: `https://www.short.com/${result[0].shorturl}` });
+          res
+            .status(202)
+            .json({ shorturl: `https://www.short.com/${result[0].shorturl}` });
         } else {
           const UUID = UUIDFunction.generateUUID();
           const shorturl = encodeBase62(UUID);
-          console.log(shorturl, UUID);
 
           urldb.query(
             DBqueries.addLongURL,
@@ -64,8 +66,9 @@ urlrouter.post("/v1/longurl/:url", (req: Request, res: Response) => {
                 console.log(error);
               }
               if (resolve) {
-                console.log(resolve);
-                res.json({ shorturl: `https://www.short.com/${shorturl}` });
+                res
+                  .status(201)
+                  .json({ shorturl: `https://www.short.com/${shorturl}` });
               }
             }
           );
@@ -88,8 +91,11 @@ urlrouter.post("/v1/shorturl/:url", async (req: Request, res: Response) => {
       if (error) {
         res.send(error);
       }
+
       if (resolve.length > 0 && resolve) {
-        res.json({ longurl: resolve[0].longurl });
+        res.status(201).json({ longurl: resolve[0].longurl });
+      } else {
+        res.status(203).json({ message: "No URL matches" });
       }
     });
   } catch (error) {

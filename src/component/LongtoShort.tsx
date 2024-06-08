@@ -10,6 +10,7 @@ const LongtoShort = () => {
     const shortURL = await axios
       .post(`${baseURL}/${longurl}`)
       .then((response) => {
+        console.log(response);
         return response.data.shorturl;
       });
     setShortURL(shortURL);
