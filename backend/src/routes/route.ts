@@ -40,12 +40,12 @@ urlrouter.post("/v1/longurl/:url", (req: Request, res: Response) => {
       new Error("Please enter your url");
     }
     const longurl = req.params.url;
-    urldb.query(DBqueries.checkLongURL, [longurl], (error, result: []) => {
+    urldb.execute(DBqueries.checkLongURL, [longurl], (error, result: []) => {
       if (error) {
         console.log(error);
       }
       if (result.length > 0) {
-        res.send("URL already exits");
+        res.send(result);
       } else {
         const UUID = UUIDFunction.generateUUID();
         const shorturl = encodeBase62(UUID);
