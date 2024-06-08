@@ -77,6 +77,7 @@ urlrouter.post("/v1/shorturl/:url", async (req: Request, res: Response) => {
       new Error("Please enter your url");
     }
     const shorturl = req.params.url;
+    console.log(shorturl);
     urldb.query(DBqueries.findlongurl, [shorturl], (error, resolve) => {
       if (error) {
         res.send(error);
